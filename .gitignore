@@ -5,3 +5,5 @@ sites/default/services.yml
 sites/default/settings.php
 
 host.yml
+
+docker-compose-production.yml
