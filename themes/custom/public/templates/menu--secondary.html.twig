@@ -1,0 +1,23 @@
+{% import _self as menus %}
+
+{{ menus.menu_links(items, attributes, 0) }}
+
+{% macro menu_links(items, attributes, menu_level) %}
+  {% import _self as menus %}
+  {% if items %}
+    {% if menu_level == 0 %}
+      <ul class="nav navbar-nav navbar-right">
+        {% for item in items %}
+          {%
+            set classes = [
+              item.in_active_trail ? 'in-active-trail',
+            ]
+          %}
+          <li{{ item.attributes.addClass(classes) }}>
+            {{ link(item.title, item.url) }}
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endif %}
+{% endmacro %}

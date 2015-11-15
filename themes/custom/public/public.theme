@@ -1,0 +1,313 @@
+<?php
+
+use \Drupal\Core\Url;
+use \Drupal\taxonomy\Entity\Term;
+use \Drupal\Component\Utility\SafeMarkup;
+use \Drupal\block\Entity\Block;
+
+/**
+ * Implements hook_theme().
+ */
+function public_theme() {
+  return array(
+    'navbar' => array(),
+    'menu__main' => array(
+      'variables' => array(
+        'items' => array(),
+        'attributes' => array(),
+      ),
+    ),
+    'menu__secondary' => array(
+      'variables' => array(
+        'items' => array(),
+        'attributes' => array(),
+      ),
+    ),
+    'menu__documentation' => array(
+      'variables' => array(
+        'items' => array(),
+        'attributes' => array(),
+      ),
+    ),
+    'slogan' => array(),
+    'wizard_item' => array(
+      'variables' => array(
+        'term' => NULL,
+      ),
+    ),
+    'language_switcher' => array(
+      'variables' => array(
+        'items' => array(),
+        'current_language' => NULL,
+      ),
+    ),
+  );
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function public_preprocess_wizard_item(&$variables) {
+  $term = $variables['term'];
+
+  $variables['step'] = $term->weight->value + 1;
+
+  $variables['inverse'] = FALSE;
+
+  if ($variables['step'] % 2 == 0) {
+    $variables['inverse'] = TRUE;
+  }
+
+  $variables['title'] = $term->name->value;
+
+  $variables['image'] = array(
+    '#theme' => 'image',
+    '#uri' => $term->field_image->entity->url(),
+    '#attributes' => array(
+      'class' => array(
+        'img-responsive',
+      ),
+    ),
+  );
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function public_preprocess_navbar(&$variables) {
+  $variables['site_logo'] = _public_site_logo();
+  $variables['site_name'] = _public_site_name();
+  $variables['main_menu'] = _dd_main_menu();
+  $variables['secondary_menu'] = _dd_secondary_menu();
+
+  $variables['language_switcher'] = array(
+    '#theme' => 'language_switcher',
+  );
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function public_preprocess_language_switcher(&$variables) {
+  $variables['items'] = array();
+
+  $language_manager = \Drupal::service('language_manager');
+  $path_matcher = \Drupal::service('path.matcher');
+
+  $route_name = '<current>';
+
+  if ($path_matcher->isFrontPage()) {
+    $route_name = '<front>';
+  }
+
+  $url = Url::fromRoute($route_name);
+
+  $language_switch_links = $language_manager->getLanguageSwitchLinks(NULL, $url);
+
+  $links = $language_switch_links->links;
+
+  $language = $language_manager->getCurrentLanguage();
+
+  foreach ($links as $langcode => $link) {
+    if ($langcode === $language->getId()) {
+      $variables['current_language'] = $link['title'];
+    }
+    else {
+      switch ($langcode) {
+        case 'en':
+          $title = SafeMarkup::format('<span class="flag-icon flag-icon-gb"></span> ' . $link['title'], array());
+
+          break;
+        case 'et':
+          $title = SafeMarkup::format('<span class="flag-icon flag-icon-ee"></span> ' . $link['title'], array());
+
+          break;
+        default:
+          $title = $link['title'];
+
+          break;
+      }
+
+      $variables['items'][] = array(
+        '#type' => 'link',
+        '#title' => $title,
+        '#options' => array(
+          'language' => $link['language'],
+        ),
+        '#url' => $link['url'],
+      );
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function public_preprocess_page(&$variables) {
+  $variables['navbar'] = array(
+    '#theme' => 'navbar',
+  );
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function public_preprocess_page__front(&$variables) {
+  $config = \Drupal::config('system.site');
+
+  $variables['slogan'] = array(
+    '#markup' => $config->get('slogan'),
+  );
+
+  $variables['slogan_2'] = array(
+    '#markup' => t('Providing consistent user experience on all major operating systems - @windows_icon Windows, @mac_icon Mac and @linux_icon Linux', array(
+      '@windows_icon' => SafeMarkup::format('<i class="fa fa-windows"></i>', array()),
+      '@mac_icon' => SafeMarkup::format('<i class="fa fa-apple"></i>', array()),
+      '@linux_icon' => SafeMarkup::format('<i class="fa fa-linux"></i>', array()),
+    )),
+  );
+
+  $variables['get_started'] = \Drupal::l(t('Get started'), Url::fromUserInput('/documentation/getting-started', array(
+    'attributes' => array(
+      'class' => array(
+        'btn',
+        'btn-success',
+        'btn-lg',
+        'get-started',
+      ),
+    ),
+  )));
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function public_preprocess_page__node__documentation(&$variables) {
+  $variables['documentation_menu'] = _dd_documentation_menu();
+
+  $node = $variables['node'];
+
+  if ($node) {
+    $nid = $node;
+
+    if (!is_numeric($node)) {
+      $nid = $node->nid->value;
+    }
+
+    $url = \Drupal::request()->getUri();
+
+    $variables['disqus_config_page_url'] = $url;
+    $variables['disqus_config_page_identifier'] = $nid;
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function public_preprocess_node(&$variables) {
+  $node = $variables['node'];
+
+  $page_last_modified_date = \Drupal::service('date.formatter')->format($node->changed->value, 'page_last_modified_date_');
+  $page_last_modified_time = \Drupal::service('date.formatter')->format($node->changed->value, 'page_last_modified_time_');
+
+  $variables['page_last_modified'] = t('This page was last modified on @date, at @time.', array(
+    '@date' => $page_last_modified_date,
+    '@time' => $page_last_modified_time,
+  ));
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function public_preprocess_input(&$variables) {
+  if ($variables['element']['#type'] == 'submit') {
+    $variables['attributes']['class'][] = 'btn';
+
+    if ($variables['element']['#button_type'] == 'primary') {
+      $variables['attributes']['class'][] = 'btn-primary';
+    }
+    else {
+      $variables['attributes']['class'][] = 'btn-default';
+    }
+  }
+}
+
+function public_preprocess_taxonomy_term(&$variables) {
+  $term = $variables['term'];
+
+  switch ($variables['elements']['#view_mode']) {
+    case 'social_media_icon':
+      $email = $term->field_email->value;
+
+      if ($email) {
+        $href = 'mailto:' . $email;
+      }
+      else {
+        $href = $term->field_url->uri;
+      }
+
+      $variables['content'] = array(
+        '#type' => 'link',
+        '#title' => SafeMarkup::format('<i class="fa ' . $term->field_font_awesome_icon->value . '"></i>', array()),
+        '#url' => Url::fromUri($href, array(
+          'attributes' => array(
+            'title' => $term->name->value,
+            'target' => '_blank',
+          ),
+        )),
+      );
+
+      break;
+    case 'logo':
+      $logo = array(
+        'image' => array(
+          '#theme' => 'image',
+          '#uri' => $term->field_image->entity->url(),
+        ),
+      );
+
+      $logo = \Drupal::service('renderer')->render($logo);
+
+      $variables['content'] = array(
+        'name' => array(
+          '#markup' => $term->name->value,
+        ),
+        'logo' => array(
+          '#type' => 'link',
+          '#title' => SafeMarkup::format($logo, array()),
+          '#url' => Url::fromUri($term->field_url->uri, array(
+            'attributes' => array(
+              'title' => $term->field_url->title,
+              'target' => '_blank',
+            ),
+          )),
+        ),
+      );
+
+      break;
+    case 'wizard':
+      $variables['content'] = array(
+        '#theme' => 'wizard_item',
+        '#term' => $term,
+        '#step' => $step,
+      );
+
+      break;
+  }
+}
+
+function _public_site_logo() {
+  return array(
+    '#theme' => 'image',
+    '#uri' => theme_get_setting('logo.url'),
+    '#alt' => t('Home'),
+  );
+}
+
+function _public_site_name() {
+  $config = \Drupal::config('system.site');
+
+  return array(
+    '#markup' => $config->get('name'),
+  );
+}
