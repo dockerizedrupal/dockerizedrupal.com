@@ -1,0 +1,13 @@
+{% for row in rows %}
+  {% if row.content %}
+    <div class="col-md-4">
+      {% if loop.last %}
+        <div class="logo last">
+      {% else %}
+        <div class="logo">
+      {% endif %}
+        {{ row.content }}
+      </div>
+    </div>
+  {% endif %}
+{% endfor %}

@@ -1,0 +1,21 @@
+<nav class="navbar navbar-inverse">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">{{ 'Toggle navigation'|t }}</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="{{ path('<front>') }}" title="{{ 'Home'|t }}" rel="home">
+        {{ site_logo }}
+      </a>
+      <a class="navbar-brand" href="{{ path('<front>') }}" title="{{ 'Home'|t }}" rel="home">{{ site_name }}</a>
+    </div>
+    <div class="collapse navbar-collapse">
+      {{ main_menu }}
+      {{ language_switcher }}
+      {{ secondary_menu }}
+    </div>
+  </div>
+</nav>

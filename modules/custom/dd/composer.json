@@ -1,0 +1,6 @@
+{
+  "name": "drupal/dd",
+  "description": "Dockerized Drupal",
+  "type": "drupal-module",
+  "license": "MIT"
+}

@@ -1,0 +1,5 @@
+{% if is_active %}
+  <li class="active">{{ link }}</li>
+{% else %}
+  <li{{ attributes }}>{{ link }}</li>
+{% endif %}

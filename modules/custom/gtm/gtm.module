@@ -1,0 +1,48 @@
+<?php
+
+/**
+ * @file
+ * Drupal Module: Google Tag Manager
+ *
+ * @author: Jürgen Viljaste <https://www.drupal.org/u/viljaste>
+ */
+
+use Drupal\Core\Cache\Cache;
+use Drupal\Component\Serialization\Json;
+
+/**
+ * Implements hook_theme().
+ */
+function gtm_theme() {
+  return array(
+    'gtm' => array(
+      'variables' => array(
+        'container_id' => '',
+      ),
+    ),
+  );
+}
+
+/**
+ * Implements hook_page_top().
+ */
+function gtm_page_top(array &$page_top) {
+  $config = \Drupal::config('gtm.settings');
+
+  $container_id = $config->get('container_id');
+
+  $page_tags = array();
+
+  if (isset($page['#cache']['tags'])) {
+    $page_tags = $page['#cache']['tags'];
+  }
+
+  $page['#cache']['tags'] = Cache::mergeTags($page_tags, $config->getCacheTags());
+
+  if (preg_match('/^GTM-.*$/', $container_id)) {
+    $page_top['gtm'] = array(
+      '#theme' => 'gtm',
+      '#container_id' => $container_id,
+    );
+  }
+}

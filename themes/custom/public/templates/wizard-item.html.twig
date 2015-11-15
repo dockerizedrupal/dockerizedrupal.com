@@ -1,0 +1,21 @@
+<div class="wizard-item">
+  <div class="row">
+{% if inverse %}
+    <div class="column display-table col-xs-12 col-md-3 col-md-push-9">
+{% else %}
+    <div class="column display-table col-xs-12 col-md-3">
+{% endif %}
+      <div class="display-table-cell vertical-align-middle">
+        <p><span class="circle">{{ step }}</span></p>
+        <p>{{ title }}</p>
+      </div>
+    </div>
+{% if inverse %}
+    <div class="column col-xs-12 col-md-9 col-md-pull-3">
+{% else %}
+    <div class="column col-xs-12 col-md-9">
+{% endif %}
+      {{ image }}
+    </div>
+  </div>
+</div>

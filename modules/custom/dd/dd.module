@@ -1,0 +1,133 @@
+<?php
+
+use Drupal\node\Entity\Node;
+
+/**
+ * Implements hook_theme_suggestions_alter().
+ */
+function dd_theme_suggestions_alter(array &$suggestions, array $variables, $hook) {
+  if ($hook === 'page') {
+    $node = \Drupal::routeMatch()->getParameter('node');
+
+    if ($node) {
+      if (is_numeric($node)) {
+        $node = Node::load($node);
+      }
+
+      $suggestions[] = 'page__node__' . $node->getType();
+    }
+  }
+}
+
+function _dd_main_menu() {
+  $menu_tree = \Drupal::menuTree();
+
+  $menu_name = 'main';
+
+  $parameters = $menu_tree->getCurrentRouteMenuTreeParameters($menu_name);
+
+  $level = 1;
+  $depth = 1;
+
+  $parameters->setMinDepth($level);
+  $parameters->setMaxDepth(min($level + $depth - 1, $menu_tree->maxDepth()));
+
+  $tree = $menu_tree->load($menu_name, $parameters);
+
+  $manipulators = array(
+    array(
+      'callable' => 'menu.default_tree_manipulators:checkAccess',
+    ),
+    array(
+      'callable' => 'menu.default_tree_manipulators:generateIndexAndSort',
+    ),
+  );
+
+  $tree = $menu_tree->transform($tree, $manipulators);
+
+  $main_menu = $menu_tree->build($tree);
+
+  $current_path = \Drupal::request()->getRequestUri();
+
+  if (isset($main_menu['#items'])) {
+    foreach ($main_menu['#items'] as $key => $item) {
+      if ($item['in_active_trail']) {
+        $main_menu['#items'][$key]['attributes']->addClass('active');
+      }
+    }
+  }
+
+  $main_menu['#theme'] = 'menu__main';
+
+  return $main_menu;
+}
+
+function _dd_secondary_menu() {
+  $menu_tree = \Drupal::menuTree();
+
+  $menu_name = 'secondary';
+
+  $parameters = $menu_tree->getCurrentRouteMenuTreeParameters($menu_name);
+
+  $level = 1;
+  $depth = 1;
+
+  $parameters->setMinDepth($level);
+  $parameters->setMaxDepth(min($level + $depth - 1, $menu_tree->maxDepth()));
+
+  $tree = $menu_tree->load($menu_name, $parameters);
+
+  $manipulators = array(
+    array(
+      'callable' => 'menu.default_tree_manipulators:checkAccess',
+    ),
+    array(
+      'callable' => 'menu.default_tree_manipulators:generateIndexAndSort',
+    ),
+  );
+
+  $tree = $menu_tree->transform($tree, $manipulators);
+
+  $secondary_menu = $menu_tree->build($tree);
+
+  $current_path = \Drupal::request()->getRequestUri();
+
+  if (isset($secondary_menu['#items'])) {
+    foreach ($secondary_menu['#items'] as $key => $item) {
+      if ($item['in_active_trail']) {
+        $secondary_menu['#items'][$key]['attributes']->addClass('active');
+      }
+    }
+  }
+
+  $secondary_menu['#theme'] = 'menu__secondary';
+
+  return $secondary_menu;
+}
+
+function _dd_documentation_menu() {
+  $menu_tree = \Drupal::menuTree();
+
+  $menu_name = 'secondary';
+
+  $parameters = $menu_tree->getCurrentRouteMenuTreeParameters($menu_name);
+
+  $tree = $menu_tree->load($menu_name, $parameters);
+
+  $manipulators = array(
+    array(
+      'callable' => 'menu.default_tree_manipulators:checkAccess',
+    ),
+    array(
+      'callable' => 'menu.default_tree_manipulators:generateIndexAndSort',
+    ),
+  );
+
+  $tree = $menu_tree->transform($tree, $manipulators);
+
+  $documentation_menu = $menu_tree->build($tree);
+
+  $documentation_menu['#theme'] = 'menu__documentation';
+
+  return $documentation_menu;
+}

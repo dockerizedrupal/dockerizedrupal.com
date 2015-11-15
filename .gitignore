@@ -1,0 +1,7 @@
+.idea
+
+sites/default/files
+sites/default/services.yml
+sites/default/settings.php
+
+host.yml

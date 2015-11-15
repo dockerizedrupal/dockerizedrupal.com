@@ -1,0 +1,30 @@
+<?php
+
+/**
+ * @file
+ * Installation file for Google Tag Manager module.
+ */
+
+/**
+ * Implements hook_requirements().
+ */
+function gtm_requirements($phase) {
+  $requirements = array();
+
+  if ($phase == 'runtime') {
+    $config = \Drupal::config('gtm.settings');
+
+    if (!preg_match('/^GTM-.*$/', $config->get('container_id'))) {
+      $requirements['gtm_container_id'] = array(
+        'title' => t('Google Tag Manager module'),
+        'description' => t('Google Tag Manager module has not been configured yet. Please configure its settings from the <a href=":url">Google Tag Manager settings page</a>.', array(
+          ':url' => \Drupal::url('gtm.admin_settings_form'),
+        )),
+        'severity' => REQUIREMENT_WARNING,
+        'value' => t('Not configured'),
+      );
+    }
+  }
+
+  return $requirements;
+}

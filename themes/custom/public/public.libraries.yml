@@ -1,0 +1,47 @@
+bootstrap:
+  version: VERSION
+  css:
+    theme:
+      bower_components/bootstrap/dist/css/bootstrap.min.css: {}
+  js:
+    bower_components/bootstrap/dist/js/bootstrap.min.js: { minified: true }
+  dependencies:
+      - core/jquery
+
+flag-icon-css:
+  version: VERSION
+  css:
+    theme:
+      bower_components/flag-icon-css/css/flag-icon.min.css: { minified: true }
+
+font-awesome:
+  version: VERSION
+  css:
+    theme:
+      bower_components/font-awesome/css/font-awesome.min.css: { minified: true }
+
+google-fonts:
+  version: VERSION
+  css:
+    theme:
+      https://fonts.googleapis.com/css?family=Roboto: { type: external }
+
+matchheight:
+  version: VERSION
+  js:
+    bower_components/matchHeight/jquery.matchHeight-min.js: { minified: true }
+
+global-styling:
+  version: VERSION
+  css:
+    theme:
+      css/public.css: {}
+  js:
+      js/public.js: {}
+  dependencies:
+      - core/drupal
+      - public/bootstrap
+      - public/font-awesome
+      - public/flag-icon-css
+      - public/google-fonts
+      - public/matchheight

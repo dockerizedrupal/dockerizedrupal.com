@@ -1,0 +1,7 @@
+dd.front_page:
+  path: '/front-page'
+  defaults:
+    _controller: '\Drupal\dd\Controller\FrontPageController::content'
+    _title: 'Front page'
+  requirements:
+    _permission: 'access content'

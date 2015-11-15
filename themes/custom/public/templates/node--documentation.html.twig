@@ -1,0 +1,14 @@
+<article>
+  {% if not page %}
+    {{ title_prefix }}
+    <h2{{ title_attributes }}>
+      <a href="{{ url }}">{{ label }}</a>
+    </h2>
+    {{ title_suffix }}
+  {% endif %}
+
+  {{ content }}
+  <div class="page-last-modified">
+    <i>{{ page_last_modified }}</i>
+  </div>
+</article>
