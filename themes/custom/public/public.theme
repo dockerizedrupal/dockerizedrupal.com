@@ -167,7 +167,7 @@ function public_preprocess_page__front(&$variables) {
     )),
   );
 
-  $variables['get_started'] = \Drupal::l(t('Get started'), Url::fromUserInput('/documentation/getting-started', array(
+  $variables['get_started'] = \Drupal::l(t('Get started'), Url::fromUserInput('/getting-started', array(
     'attributes' => array(
       'class' => array(
         'btn',
