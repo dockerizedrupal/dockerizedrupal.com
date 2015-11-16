@@ -102,7 +102,7 @@ function public_preprocess_language_switcher(&$variables) {
 
   $url = Url::fromRoute($route_name);
 
-  $language_switch_links = $language_manager->getLanguageSwitchLinks(NULL, $url);
+  $language_switch_links = $language_manager->getLanguageSwitchLinks('language_interface', $url);
 
   $links = $language_switch_links->links;
 
@@ -289,7 +289,6 @@ function public_preprocess_taxonomy_term(&$variables) {
       $variables['content'] = array(
         '#theme' => 'wizard_item',
         '#term' => $term,
-        '#step' => $step,
       );
 
       break;
