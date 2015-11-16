@@ -298,6 +298,7 @@ h1 {
 
 .menu--documentation .in-active-trail > a {
   text-decoration: underline;
+  font-weight: bold;
 }
 
 .maintenance-page .content {
