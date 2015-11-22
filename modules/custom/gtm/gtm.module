@@ -27,6 +27,10 @@ function gtm_theme() {
  * Implements hook_page_top().
  */
 function gtm_page_top(array &$page_top) {
+  if (isset($_SERVER['HTTP_DNT']) && $_SERVER['HTTP_DNT'] == 1) {
+    return;
+  }
+
   $config = \Drupal::config('gtm.settings');
 
   $container_id = $config->get('container_id');
