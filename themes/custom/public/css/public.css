@@ -163,6 +163,9 @@ h1 {
 .get-started {
   padding: 4px 16px;
   font-size: 36px;
+  border-color: #449d44;
+  border-bottom-width: 3px;
+  box-shadow: 0 3px 9px rgba(0,0,0,0.15);
 }
 
 .slogan h1 {
