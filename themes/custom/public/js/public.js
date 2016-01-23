@@ -6,6 +6,10 @@
       $(window).load(function() {
         $('.wizard-item .column').matchHeight();
       });
+
+      $(function() {
+        $('body').fitVids();
+      });
     }
   };
 

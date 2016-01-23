@@ -31,6 +31,13 @@ matchheight:
   js:
     bower_components/matchHeight/jquery.matchHeight-min.js: { minified: true }
 
+fitvids:
+  version: VERSION
+  js:
+    bower_components/jquery.fitvids/jquery.fitvids.js: {}
+  dependencies:
+      - core/jquery
+
 global-styling:
   version: VERSION
   css:
@@ -45,3 +52,4 @@ global-styling:
       - public/flag-icon-css
       - public/google-fonts
       - public/matchheight
+      - public/fitvids
