@@ -212,8 +212,10 @@ h1 {
 .social-media-icons {
   text-align: center;
   border-top: 1px solid #e2e2df;
+  border-bottom: 1px solid #e2e2df;
   margin-top: 40px;
   padding-top: 40px;
+  padding-bottom: 40px;
 }
 
 .social-media-icons .social-media-icon {
@@ -239,6 +241,16 @@ h1 {
 .social-media-icons .social-media-icon a:focus,
 .social-media-icons .social-media-icon a:hover {
   color: #4cae4c;
+}
+
+.recent-comments {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.recent-comments h2 {
+  margin: 0;
+  line-height: 30px;
 }
 
 .logos {
