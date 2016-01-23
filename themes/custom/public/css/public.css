@@ -253,6 +253,10 @@ h1 {
   line-height: 30px;
 }
 
+.recent-comments .dsq-widget-list {
+  padding-left: 0;
+}
+
 .logos {
   padding-top: 40px;
   padding-bottom: 40px;
