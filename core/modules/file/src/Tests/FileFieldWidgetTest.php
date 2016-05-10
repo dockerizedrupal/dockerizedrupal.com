@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\file\Tests\FileFieldWidgetTest.
- */
-
 namespace Drupal\file\Tests;
 
 use Drupal\comment\Entity\Comment;
@@ -480,6 +475,12 @@ class FileFieldWidgetTest extends FileFieldTestBase {
 
     // If the field has at least a item, the table should be visible.
     $this->assertIdentical(count($elements), 1);
+
+    // Test for AJAX error when using progress bar on file field widget
+    $key = $this->randomMachineName();
+    $this->drupalPost('file/progress/' . $key, 'application/json', []);
+    $this->assertNoResponse(500, t('No AJAX error when using progress bar on file field widget'));
+    $this->assertText('Starting upload...');
   }
 
   /**
